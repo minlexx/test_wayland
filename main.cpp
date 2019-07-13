@@ -41,7 +41,7 @@ static void on_global_added(void *data,
 {
     (void)data;
     (void)wl_registry;
-    std::cout << " Global added: " << interface
+    std::cerr << " Global added: " << interface
               << ", v" << version
               << " (name " << name << ")"
               << std::endl;
@@ -68,7 +68,7 @@ static void on_global_removed(void *data,
 {
     (void)data;
     (void)wl_registry;
-    std::cout << " Global removed: name: " << name
+    std::cerr << " Global removed: name: " << name
               << std::endl;
 }
 
@@ -78,26 +78,29 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
     
+    std::cerr << "XDG_RUNTIME_DIR = " << getenv("XDG_RUNTIME_DIR") << std::endl;
+    
     struct wl_display *disp = wl_display_connect(nullptr);
     if (!disp) {
         std::cerr << "Failed to connect to wayland display!" << std::endl;
         return 1;
     }
     
-    std::cout << "Connect OK!" << std::endl;
+    std::cerr << "Connect OK!" << std::endl;
     
     struct wl_registry *reg = wl_display_get_registry(disp);
     if (!reg) {
         std::cerr << "Faild to get registry!" << std::endl;
     }
     
-    std::cout << "Got registry OK!" << std::endl;
+    std::cerr << "Got registry OK!" << std::endl;
     
     wl_registry_add_listener(reg, &s_registryListener, nullptr);
     
     wl_display_dispatch(disp);
     
-    std::cout << "Sleeping for 10 secs..." << std::endl;
+    //std::cout << "Sleeping for 10 secs..." << std::endl;
+    std::cerr << "Sleeping for 10 secs..." << std::endl;
     sleep(10);
     
     wl_display_disconnect(disp);
